@@ -1,5 +1,6 @@
 var gulp   = require('gulp');
 var Elixir = require('../../index');
+var postcss = require('gulp-postcss');
 
 var $ = Elixir.Plugins;
 var config = Elixir.config;
@@ -20,6 +21,7 @@ module.exports = function(options) {
             this.emit('end');
         })
         .pipe($.if(config.css.autoprefix.enabled, $.autoprefixer(config.css.autoprefix.options)))
+        .pipe($.if(config.css.postcss.enabled, postcss(config.css.postcss.plugins)))
         .pipe($.concat(options.output.name))
         .pipe($.if(config.production, $.cssnano(config.css.cssnano.pluginOptions)))
         .pipe($.if(config.sourcemaps, $.sourcemaps.write('.')))

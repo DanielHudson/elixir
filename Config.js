@@ -199,6 +199,22 @@ var config = {
 
         /*
          |----------------------------------------------------------------
+         | PostCSS processing
+         |----------------------------------------------------------------
+         |
+         | When running an Elixir task that outputs CSS you can
+         | opt to automatically process the CSS that is made
+         | by using postcss and its available processors.   
+         |
+         */
+        postcss: {
+            enabled: false,
+            plugins: [
+            ],
+        },
+
+        /*
+         |----------------------------------------------------------------
          | Sass Compilation
          |----------------------------------------------------------------
          |
