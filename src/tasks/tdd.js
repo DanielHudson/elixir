@@ -1,5 +1,5 @@
-var gulp = require('gulp');
-var Elixir = require('laravel-elixir');
+import gulp from 'gulp';
+import Elixir from 'laravel-elixir';
 
 /*
  |----------------------------------------------------------------
@@ -16,10 +16,6 @@ gulp.task('tdd', function() {
     new Elixir.Log.message('Watching for tests...');
 
     Elixir.tasks
-        .filter(function(task) {
-            return task.category == 'tdd';
-        })
-        .forEach(function(task) {
-            gulp.watch(task.watchers, [task.name]);
-        });
+        .filter(task  => task.category == 'tdd')
+        .forEach(task => gulp.watch(task.watchers, [task.name]));
 });

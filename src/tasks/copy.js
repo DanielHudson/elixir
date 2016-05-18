@@ -1,7 +1,4 @@
-var gulp = require('gulp');
-var Elixir = require('laravel-elixir');
-
-var $ = Elixir.Plugins;
+import Elixir from 'laravel-elixir';
 
 /*
  |----------------------------------------------------------------
@@ -15,9 +12,9 @@ var $ = Elixir.Plugins;
  */
 
 Elixir.extend('copy', function(src, output) {
-    var paths = new Elixir.GulpPaths().src(src).output(output);
+    const paths = new Elixir.GulpPaths().src(src).output(output);
 
-    new Elixir.Task('copy', function() {
+    new Elixir.Task('copy', function(gulp, $) {
         this.log(paths.src, paths.output);
 
         return (

@@ -1,8 +1,5 @@
-var gulp    = require('gulp');
-var compile = require('./shared/Css');
-var Elixir = require('laravel-elixir');
-
-var config = Elixir.config;
+import Elixir from 'laravel-elixir';
+import compile from './shared/Css';
 
 /*
  |----------------------------------------------------------------
@@ -16,7 +13,7 @@ var config = Elixir.config;
  */
 
 Elixir.extend('less', function(src, output, options) {
-    var paths = prepGulpPaths(src, output);
+    const paths = prepGulpPaths(src, output);
 
     new Elixir.Task('less', function() {
         return compile({
@@ -25,12 +22,13 @@ Elixir.extend('less', function(src, output, options) {
             src: paths.src,
             output: paths.output,
             task: this,
-            pluginOptions: options || config.css.less.pluginOptions
+            pluginOptions: options || Elixir.config.css.less.pluginOptions
         });
     })
     .watch(paths.src.baseDir + '/**/*.less')
     .ignore(paths.output.path);
 });
+
 
 /**
  * Prep the Gulp src and output paths.
@@ -39,8 +37,8 @@ Elixir.extend('less', function(src, output, options) {
  * @param  {string|null}  output
  * @return {GulpPaths}
  */
-var prepGulpPaths = function(src, output) {
+const prepGulpPaths = function(src, output) {
     return new Elixir.GulpPaths()
-        .src(src, config.get('assets.css.less.folder'))
-        .output(output || config.get('public.css.outputFolder'), 'app.css');
+        .src(src, Elixir.config.get('assets.css.less.folder'))
+        .output(output || Elixir.config.get('public.css.outputFolder'), 'app.css');
 };

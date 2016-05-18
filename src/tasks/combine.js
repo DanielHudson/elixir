@@ -1,8 +1,4 @@
-var gulp   = require('gulp');
-var Elixir = require('laravel-elixir');
-
-var $ = Elixir.Plugins;
-var config = Elixir.config;
+import Elixir from 'laravel-elixir';
 
 /*
  |----------------------------------------------------------------
@@ -16,9 +12,9 @@ var config = Elixir.config;
  */
 
 Elixir.extend('combine', function(src, output, baseDir) {
-    var paths = prepGulpPaths(src, baseDir, output);
+    const paths = prepGulpPaths(src, baseDir, output);
 
-    new Elixir.Task('combine', function() {
+    new Elixir.Task('combine', function(gulp, $) {
         this.log(paths.src, paths.output);
 
         return (
@@ -41,7 +37,7 @@ Elixir.extend('combine', function(src, output, baseDir) {
  * @param  {string|null}  output
  * @return {GulpPaths}
  */
-var prepGulpPaths = function(src, baseDir, output) {
+const prepGulpPaths = function(src, baseDir, output) {
     return new Elixir.GulpPaths()
         .src(src, baseDir || '')
         .output(output);

@@ -1,7 +1,8 @@
-var p = require('path');
-var gutils = require('gulp-util');
+import p from 'path';
+import gutils from 'gulp-util';
 
-var production = gutils.env.production || process.env.NODE_ENV === 'production';
+const production = gutils.env.production ||
+                   process.env.NODE_ENV === 'production';
 
 /*
  |----------------------------------------------------------------
@@ -18,20 +19,7 @@ var production = gutils.env.production || process.env.NODE_ENV === 'production';
  |
  */
 
-var config = {
-
-    /*
-     |----------------------------------------------------------------
-     | Tasks
-     |----------------------------------------------------------------
-     |
-     | The tasks array stores all tasks that should be executed each
-     | time you trigger Gulp from the command line. Generally you
-     | won't need to modify this but it's an option if needed.
-     |
-     */
-
-    tasks: [],
+const config = {
 
     /*
      |----------------------------------------------------------------
@@ -44,7 +32,7 @@ var config = {
      |
      */
 
-    production: production,
+    production,
 
     /*
      |----------------------------------------------------------------
@@ -97,6 +85,19 @@ var config = {
      */
 
     viewPath: 'resources/views',
+
+    /*
+     |----------------------------------------------------------------
+     | Notifications
+     |----------------------------------------------------------------
+     |
+     | As a convenience, Elixir will, when available, automatically
+     | display OS notifications upon the completion of any task.
+     | But of course you're free to disable this, if needed.
+     |
+     */
+
+    notifications: true,
 
     /*
      |----------------------------------------------------------------
@@ -172,7 +173,7 @@ var config = {
 
             // https://www.npmjs.com/package/gulp-autoprefixer#api
             options:  {
-                browsers: ['last 2 versions'],
+                browsers: ['> 1%'],
                 cascade: false
             }
         },
@@ -188,13 +189,9 @@ var config = {
          |
          */
 
-        cssnano: {
-            // http://cssnano.co/options
-            pluginOptions: {
-                discardComments: { removeAll: true },
-                autoprefixer: false,
-                safe: true
-            }
+        minifier: {
+            // https://github.com/jakubpawlowicz/clean-css#how-to-use-clean-css-api
+            pluginOptions: {}
         },
 
         /*
@@ -366,24 +363,6 @@ var config = {
                 // https://www.npmjs.com/package/watchify#usage
                 options: {}
             }
-        },
-
-        /*
-         |----------------------------------------------------------------
-         | CoffeeScript Compilation
-         |----------------------------------------------------------------
-         |
-         | If you prefer CoffeeScript compilation, this object stores
-         | the defaults for the Coffee folder name - not the path.
-         | When used, this value will be affixed to assetsPath.
-         |
-         */
-
-        coffee: {
-            folder: 'coffee',
-
-            // https://github.com/wearefractal/gulp-coffee#options
-            options: {}
         }
     },
 
@@ -475,12 +454,9 @@ config.get = function(path) {
         basePath = config[segments.shift()+'Path'];
     }
 
-    segments.forEach(function(segment) {
-        current = current[segment];
-    });
+    segments.forEach(segment => current = current[segment]);
 
     return p.join(basePath, current);
 };
 
-
-module.exports = config;
+export default config;

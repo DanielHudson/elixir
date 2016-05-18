@@ -2,11 +2,15 @@ var gulp   = require('gulp');
 var Elixir = require('../../index');
 var postcss = require('gulp-postcss');
 
-var $ = Elixir.Plugins;
-var config = Elixir.config;
+const $ = Elixir.Plugins;
+const config = Elixir.config;
+let map;
+let CleanCSS;
 
-module.exports = function(options) {
-    var name = options.name;
+export default function(options) {
+    const name = options.name;
+
+    loadPlugins();
 
     options.task.log(options.src, options.output);
 
@@ -23,9 +27,30 @@ module.exports = function(options) {
         .pipe($.if(config.css.autoprefix.enabled, $.autoprefixer(config.css.autoprefix.options)))
         .pipe($.if(config.css.postcss.enabled, postcss(config.css.postcss.plugins)))
         .pipe($.concat(options.output.name))
-        .pipe($.if(config.production, $.cssnano(config.css.cssnano.pluginOptions)))
+        .pipe($.if(config.production, minify()))
         .pipe($.if(config.sourcemaps, $.sourcemaps.write('.')))
         .pipe(gulp.dest(options.output.baseDir))
         .pipe(new Elixir.Notification(name + ' Compiled!'))
     );
+};
+
+
+/**
+ * Prepare the minifier instance.
+ */
+const minify = function () {
+    return map(function (buff, filename) {
+        return new CleanCSS(config.css.minifier.pluginOptions)
+            .minify(buff.toString())
+            .styles;
+    });
+};
+
+
+/**
+ * Load the required Gulp plugins on demand.
+ */
+const loadPlugins = function () {
+    map = require('vinyl-map');
+    CleanCSS = require('clean-css');
 };

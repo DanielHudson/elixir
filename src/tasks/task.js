@@ -1,5 +1,4 @@
-var gulp = require('gulp');
-var Elixir = require('laravel-elixir');
+import Elixir from 'laravel-elixir';
 
 /*
  |----------------------------------------------------------------
@@ -12,12 +11,8 @@ var Elixir = require('laravel-elixir');
  |
  */
 
-Elixir.extend('task', function(name, watcher) {
-    var task = new Elixir.Task('task', function() {
-        return gulp.start(name);
-    });
+Elixir.extend('task', (name, watcher) => {
+    const task = new Elixir.Task('task', gulp => gulp.start(name));
 
-    if (watcher) {
-        task.watch(watcher);
-    }
+    watcher && task.watch(watcher);
 });

@@ -1,10 +1,7 @@
-var gulp = require('gulp');
-var _ = require('underscore');
-var gutils = require('gulp-util');
-var Elixir = require('laravel-elixir');
-var browserSync = require('browser-sync').create();
+import Elixir from 'laravel-elixir';
 
-var config = Elixir.config;
+let _;
+let browserSync;
 
 /*
  |----------------------------------------------------------------
@@ -18,31 +15,53 @@ var config = Elixir.config;
  */
 
 Elixir.extend('browserSync', function (options) {
-    options = _.extend(config.browserSync, {
+    loadPlugins();
+
+    // Browsersync will only run during `gulp watch`.
+    if (Elixir.isWatching()) {
+        browserSync.init(getOptions(options));
+    }
+
+    new Elixir.Task('browserSync', function () {}).watch();
+});
+
+
+/**
+ * Load the required Gulp plugins on demand.
+ */
+function loadPlugins() {
+    _ = require('underscore');
+    browserSync = require('browser-sync').create();
+};
+
+
+/**
+ * Get all Browsersync options.
+ *
+ * @param  {object|null} options
+ * @return {object}
+ */
+function getOptions(options) {
+    let config = Elixir.config;
+
+    return _.extend({
         files: [
             config.appPath + '/**/*.php',
             config.get('public.css.outputFolder') + '/**/*.css',
             config.get('public.js.outputFolder') + '/**/*.js',
             config.get('public.versioning.buildFolder') + '/rev-manifest.json',
-            config.viewPath +'/**/*.php'
+            config.viewPath + '/**/*.php'
         ],
+
         watchOptions: {
             usePolling: true
         },
+
         snippetOptions: {
             rule: {
                 match: /(<\/body>|<\/pre>)/i,
-                fn: function (snippet, match) {
-                    return snippet + match;
-                }
+                fn: (snippet, match) => snippet + match
             }
         }
-    }, options);
-
-    // Browsersync will only run during `gulp watch`.
-    if (gutils.env._.indexOf('watch') > -1) {
-        browserSync.init(options);
-    }
-
-    new Elixir.Task('browserSync', function () {}).watch();
-});
+    }, config.browserSync, options);
+}

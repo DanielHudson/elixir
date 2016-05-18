@@ -1,8 +1,8 @@
-var gulp = require('gulp');
-var Elixir = require('laravel-elixir');
+import gulp from 'gulp';
+import Elixir from 'laravel-elixir';
 
-var $ = Elixir.Plugins;
-var config = Elixir.config;
+const $ = Elixir.Plugins;
+const config = Elixir.config;
 
 /*
  |----------------------------------------------------------------
@@ -16,7 +16,7 @@ var config = Elixir.config;
  */
 
 Elixir.extend('scripts', function(scripts, output, baseDir) {
-    var paths = prepGulpPaths(scripts, baseDir, output);
+    const paths = prepGulpPaths(scripts, baseDir, output);
 
     new Elixir.Task('scripts', function() {
         return gulpTask.call(this, paths);
@@ -25,8 +25,9 @@ Elixir.extend('scripts', function(scripts, output, baseDir) {
     .ignore(paths.output.path);
 });
 
+
 Elixir.extend('scriptsIn', function(baseDir, output) {
-    var paths = prepGulpPaths('**/*.js', baseDir, output);
+    const paths = prepGulpPaths('**/*.js', baseDir, output);
 
     new Elixir.Task('scriptsIn', function() {
         return gulpTask.call(this, paths);
@@ -35,17 +36,19 @@ Elixir.extend('scriptsIn', function(baseDir, output) {
     .ignore(paths.output.path);
 });
 
+
 Elixir.extend('babel', function(scripts, output, baseDir, options) {
-    var paths = prepGulpPaths(scripts, baseDir, output);
+    const paths = prepGulpPaths(scripts, baseDir, output);
 
     new Elixir.Task('babel', function() {
-        var babelOptions = options || config.js.babel.options;
-
-        return gulpTask.call(this, paths, babelOptions);
+        return gulpTask.call(
+            this, paths, options || config.js.babel.options
+        );
     })
     .watch(paths.src.path)
     .ignore(paths.output.path);
 });
+
 
 /**
  * Trigger the Gulp task logic.
@@ -53,7 +56,7 @@ Elixir.extend('babel', function(scripts, output, baseDir, options) {
  * @param {GulpPaths}   paths
  * @param {object|null} babel
  */
-var gulpTask = function(paths, babel) {
+const gulpTask = function(paths, babel) {
     this.log(paths.src, paths.output);
 
     return (
@@ -64,6 +67,7 @@ var gulpTask = function(paths, babel) {
         .pipe($.if(babel, $.babel(babel)))
         .on('error', function(e) {
             new Elixir.Notification().error(e, 'Babel Compilation Failed!');
+
             this.emit('end');
         })
         .pipe($.if(config.production, $.uglify(config.js.uglify.options)))
@@ -73,6 +77,7 @@ var gulpTask = function(paths, babel) {
     );
 };
 
+
 /**
  * Prep the Gulp src and output paths.
  *
@@ -81,7 +86,7 @@ var gulpTask = function(paths, babel) {
  * @param  {string|null}  output
  * @return {GulpPaths}
  */
-var prepGulpPaths = function(src, baseDir, output) {
+const prepGulpPaths = function(src, baseDir, output) {
     return new Elixir.GulpPaths()
         .src(src, baseDir || config.get('assets.js.folder'))
         .output(output || config.get('public.js.outputFolder'), 'all.js');

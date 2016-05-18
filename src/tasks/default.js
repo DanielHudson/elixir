@@ -1,7 +1,6 @@
-var gulp = require('gulp');
-var _ = require('underscore');
-var Elixir = require('laravel-elixir');
-var inSequence = require('run-sequence');
+import gulp from 'gulp';
+import Elixir from 'laravel-elixir';
+import inSequence from 'run-sequence';
 
 /*
  |----------------------------------------------------------------
@@ -15,5 +14,11 @@ var inSequence = require('run-sequence');
  */
 
 gulp.task('default', function() {
-    inSequence.apply(this, _.pluck(Elixir.tasks, 'name'));
+    const tasks = Elixir.tasks.names();
+
+    Elixir.hooks.before.forEach(hook => hook());
+
+    if (tasks.length) {
+        inSequence.apply(this, tasks);
+    }
 });

@@ -1,9 +1,7 @@
-var gulp   = require('gulp');
-var Elixir = require('laravel-elixir');
+import Elixir from 'laravel-elixir';
+import runTests from './shared/Tests';
 
-var config = Elixir.config;
-var runTests = require('./shared/Tests.js');
-
+const config = Elixir.config;
 
 /*
  |----------------------------------------------------------------
@@ -23,4 +21,3 @@ Elixir.extend('phpUnit', function(src, command) {
         command || 'vendor/bin/phpunit --verbose'
     );
 });
-
