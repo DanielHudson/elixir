@@ -282,24 +282,6 @@ const config = {
 
         /*
          |----------------------------------------------------------------
-         | Babel Compilation
-         |----------------------------------------------------------------
-         |
-         | Think of Babel as a compiler for next-generation JavaScript.
-         | If you'd like to make use of ES6 - or even ES7 features -
-         | in new apps, we make it a cinch right from the get go.
-         |
-         */
-
-        babel: {
-            // https://www.npmjs.com/package/gulp-babel#babel-options
-            options: {
-                presets: ['es2015', 'react']
-            }
-        },
-
-        /*
-         |----------------------------------------------------------------
          | UglifyJS Parser/Compressor/Beautifier
          |----------------------------------------------------------------
          |
@@ -314,54 +296,6 @@ const config = {
                 compress: {
                     drop_console: true
                 }
-            }
-        },
-
-        /*
-         |----------------------------------------------------------------
-         | Browserify Compilation
-         |----------------------------------------------------------------
-         |
-         | Browserify allows you to pull in Node modules in the browser!
-         | Generally a pain to get up and running, Elixir offers many
-         | sensible defaults to get you up to speed super quickly.
-         |
-         */
-
-        browserify: {
-            // https://www.npmjs.com/package/browserify#usage
-            options: {
-                cache: {},
-                packageCache: {}
-            },
-
-            plugins: [],
-
-            externals: [],
-
-            transformers: [
-                {
-                    name: 'babelify',
-
-                    // https://www.npmjs.com/package/gulp-babel#babel-options
-                    options: {
-                        presets: ['es2015', 'react']
-                    }
-                },
-
-                {
-                    name: 'partialify',
-
-                    // https://www.npmjs.com/package/partialify
-                    options: {}
-                }
-            ],
-
-            watchify: {
-                enabled: false,
-
-                // https://www.npmjs.com/package/watchify#usage
-                options: {}
             }
         }
     },
